@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Heart, MessageCircle, Send, Bookmark } from 'lucide-react';
+import { HeartIcon, CommentIcon, ShareIcon, BookmarkIcon, EmojiIcon } from './Icons';
+import { Heart } from 'lucide-react'; // Keeping this for the bouncing overlay ONLY
 import Image from 'next/image';
 
 interface Product {
@@ -104,17 +105,17 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="flex justify-between px-3 pt-3 pb-2">
         <div className="flex space-x-4">
           <button onClick={toggleLike} className="hover:opacity-50 transition-transform active:scale-90">
-            <Heart className={`w-[24px] h-[24px] stroke-[1.5px] ${liked ? 'fill-[#ff3040] text-[#ff3040]' : 'text-[#262626]'}`} />
+            <HeartIcon filled={liked} />
           </button>
           <button className="hover:opacity-50 transition-transform active:scale-90">
-             <MessageCircle className="w-[24px] h-[24px] text-[#262626] stroke-[1.5px] -rotate-90" />
+             <CommentIcon />
           </button>
           <button className="hover:opacity-50 transition-transform active:scale-90">
-             <Send className="w-[24px] h-[24px] text-[#262626] stroke-[1.5px] -rotate-45 mb-1" />
+             <ShareIcon />
           </button>
         </div>
         <button onClick={toggleSave} className="hover:opacity-50 transition-transform active:scale-90">
-            <Bookmark className={`w-[24px] h-[24px] stroke-[1.5px] ${saved ? 'fill-[#262626] text-[#262626]' : 'text-[#262626]'}`} />
+            <BookmarkIcon filled={saved} />
         </button>
       </div>
 
@@ -156,9 +157,7 @@ export default function ProductCard({ product }: { product: Product }) {
       {/* Add Comment */}
       <form onSubmit={handleAddComment} className="hidden md:flex border-t border-gray-100 px-3 py-3 items-center">
         <button type="button" className="mr-3">
-             <svg aria-label="Emoji" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24">
-                <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>
-            </svg>
+             <EmojiIcon />
         </button>
         <input 
           type="text" 

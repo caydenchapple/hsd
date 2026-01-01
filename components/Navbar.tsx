@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { PlusSquare, Home, Heart, User, Search } from 'lucide-react';
+import { HomeIcon, CreateIcon, HeartIcon, ProfileIcon, SearchIcon } from './Icons';
 
 export default function Navbar({ onAddClick }: { onAddClick: () => void }) {
   return (
@@ -12,7 +12,7 @@ export default function Navbar({ onAddClick }: { onAddClick: () => void }) {
         
         {/* Search Bar (Hidden on mobile) */}
         <div className="hidden md:flex items-center bg-[#efefef] px-4 py-1.5 rounded-lg w-64">
-          <Search className="w-4 h-4 text-gray-400 mr-2" />
+          <SearchIcon className="w-4 h-4 text-gray-400 mr-2" />
           <input 
             type="text" 
             placeholder="Search" 
@@ -23,16 +23,16 @@ export default function Navbar({ onAddClick }: { onAddClick: () => void }) {
         {/* Icons */}
         <div className="flex items-center space-x-6">
           <Link href="/">
-            <Home className="w-[26px] h-[26px] text-[#262626] stroke-[1.5px]" />
+            <HomeIcon className="w-[26px] h-[26px] text-[#262626]" />
           </Link>
           <button id="add-product-btn" onClick={onAddClick} className="hover:opacity-60 transition-opacity">
-            <PlusSquare className="w-[26px] h-[26px] text-[#262626] stroke-[1.5px]" />
+            <CreateIcon className="w-[26px] h-[26px] text-[#262626]" />
           </button>
           <Link href="#">
-            <Heart className="w-[26px] h-[26px] text-[#262626] stroke-[1.5px]" />
+            <HeartIcon className="w-[26px] h-[26px] text-[#262626]" />
           </Link>
           <Link href="#">
-            <User className="w-[26px] h-[26px] text-[#262626] stroke-[1.5px]" />
+            <ProfileIcon className="w-[26px] h-[26px]" />
           </Link>
         </div>
       </div>
