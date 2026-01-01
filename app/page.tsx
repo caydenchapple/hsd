@@ -48,10 +48,10 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 pb-20">
+    <main className="min-h-screen bg-[#fafafa] pb-20">
       <Navbar onAddClick={() => setIsModalOpen(true)} />
       
-      <div className="pt-24 px-4 flex flex-col items-center">
+      <div className="pt-24 px-0 md:px-4 flex flex-col items-center">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
