@@ -11,11 +11,14 @@ interface Product {
   imageUrl: string;
   likes: number;
   username: string;
+  comments?: { username: string; text: string }[];
 }
 
 export default function ProductCard({ product }: { product: Product }) {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(product.likes);
+  const [comments, setComments] = useState(product.comments || []);
+  const [newComment, setNewComment] = useState('');
 
   const toggleLike = () => {
     if (liked) {
@@ -24,6 +27,13 @@ export default function ProductCard({ product }: { product: Product }) {
       setLikes(likes + 1);
     }
     setLiked(!liked);
+  };
+
+  const handleAddComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+    setComments([...comments, { username: 'current_user', text: newComment }]);
+    setNewComment('');
   };
 
   return (
@@ -71,13 +81,39 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       {/* Caption */}
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-2">
         <span className="font-semibold text-sm mr-2">{product.username}</span>
         <span className="text-sm">{product.description}</span>
         <div className="text-xs text-gray-500 mt-1 uppercase">
             {product.name}
         </div>
       </div>
+
+      {/* Comments */}
+      {comments.length > 0 && (
+        <div className="px-4 pb-2 space-y-1">
+          {comments.map((comment, i) => (
+            <div key={i} className="text-sm">
+              <span className="font-semibold mr-2">{comment.username}</span>
+              <span>{comment.text}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Add Comment */}
+      <form onSubmit={handleAddComment} className="border-t border-gray-200 px-4 py-3 flex items-center">
+        <input 
+          type="text" 
+          placeholder="Add a comment..." 
+          className="flex-1 outline-none text-sm"
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        />
+        {newComment && (
+          <button type="submit" className="text-blue-500 font-semibold text-sm ml-2">Post</button>
+        )}
+      </form>
     </div>
   );
 }
