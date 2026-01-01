@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Sidebar';
+import Suggestions from '@/components/Suggestions';
+import Stories from '@/components/Stories';
 import ProductCard from '@/components/ProductCard';
 import AddProductModal from '@/components/AddProductModal';
 
@@ -48,13 +51,33 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#fafafa] pb-20">
-      <Navbar onAddClick={() => setIsModalOpen(true)} />
-      
-      <div className="pt-24 px-0 md:px-4 flex flex-col items-center">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+    <main className="min-h-screen bg-[#fafafa]">
+      {/* Mobile Navbar */}
+      <div className="md:hidden">
+        <Navbar onAddClick={() => setIsModalOpen(true)} />
+      </div>
+
+      <div className="flex justify-center">
+        {/* Left Sidebar (Desktop) */}
+        <Sidebar onAddClick={() => setIsModalOpen(true)} />
+
+        {/* Main Feed Section */}
+        <div className="flex-1 max-w-[630px] w-full pt-[60px] md:pt-8 md:ml-[245px] lg:mr-[320px]">
+           <div className="flex flex-col items-center w-full px-0 md:px-4">
+             {/* Stories Bar */}
+             <Stories />
+             
+             {/* Feed */}
+             <div className="w-full">
+                {products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+             </div>
+           </div>
+        </div>
+
+        {/* Right Suggestions (Desktop) */}
+        <Suggestions />
       </div>
 
       <AddProductModal 

@@ -19,6 +19,8 @@ export default function ProductCard({ product }: { product: Product }) {
   const [likes, setLikes] = useState(product.likes);
   const [comments, setComments] = useState(product.comments || []);
   const [newComment, setNewComment] = useState('');
+  const [showHeartOverlay, setShowHeartOverlay] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const toggleLike = () => {
     if (liked) {
@@ -27,6 +29,19 @@ export default function ProductCard({ product }: { product: Product }) {
       setLikes(likes + 1);
     }
     setLiked(!liked);
+  };
+
+  const handleDoubleClick = () => {
+    if (!liked) {
+      setLikes(likes + 1);
+      setLiked(true);
+    }
+    setShowHeartOverlay(true);
+    setTimeout(() => setShowHeartOverlay(false), 1000);
+  };
+
+  const toggleSave = () => {
+    setSaved(!saved);
   };
 
   const handleAddComment = (e: React.FormEvent) => {
@@ -61,7 +76,10 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       {/* Image */}
-      <div className="relative w-full aspect-square bg-[#efefef]">
+      <div 
+        className="relative w-full aspect-square bg-[#efefef] cursor-pointer"
+        onDoubleClick={handleDoubleClick}
+      >
         {product.imageUrl ? (
             <Image 
                 src={product.imageUrl} 
@@ -75,23 +93,28 @@ export default function ProductCard({ product }: { product: Product }) {
         ) : (
             <div className="flex items-center justify-center w-full h-full text-gray-400">No Image</div>
         )}
+        
+        {/* Heart Overlay Animation */}
+        <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${showHeartOverlay ? 'opacity-100' : 'opacity-0'}`}>
+            <Heart className="w-24 h-24 text-white fill-white drop-shadow-lg animate-bounce" />
+        </div>
       </div>
 
       {/* Actions */}
       <div className="flex justify-between px-3 pt-3 pb-2">
         <div className="flex space-x-4">
-          <button onClick={toggleLike} className="hover:opacity-50">
+          <button onClick={toggleLike} className="hover:opacity-50 transition-transform active:scale-90">
             <Heart className={`w-[24px] h-[24px] stroke-[1.5px] ${liked ? 'fill-[#ff3040] text-[#ff3040]' : 'text-[#262626]'}`} />
           </button>
-          <button className="hover:opacity-50">
+          <button className="hover:opacity-50 transition-transform active:scale-90">
              <MessageCircle className="w-[24px] h-[24px] text-[#262626] stroke-[1.5px] -rotate-90" />
           </button>
-          <button className="hover:opacity-50">
+          <button className="hover:opacity-50 transition-transform active:scale-90">
              <Send className="w-[24px] h-[24px] text-[#262626] stroke-[1.5px] -rotate-45 mb-1" />
           </button>
         </div>
-        <button className="hover:opacity-50">
-            <Bookmark className="w-[24px] h-[24px] text-[#262626] stroke-[1.5px]" />
+        <button onClick={toggleSave} className="hover:opacity-50 transition-transform active:scale-90">
+            <Bookmark className={`w-[24px] h-[24px] stroke-[1.5px] ${saved ? 'fill-[#262626] text-[#262626]' : 'text-[#262626]'}`} />
         </button>
       </div>
 
