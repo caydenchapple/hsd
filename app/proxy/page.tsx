@@ -11,6 +11,22 @@ export default function ProxyPage() {
   const [currentUrl, setCurrentUrl] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passcode, setPasscode] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passcode === '1021') {
+      setIsAuthenticated(true);
+      setError('');
+    } else {
+      setError('Incorrect passcode. Please try again.');
+      setPasscode('');
+    }
+  };
 
   const handleBrowse = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +56,42 @@ export default function ProxyPage() {
     console.log('Product added from proxy page (not persisted):', product);
     setIsModalOpen(false);
   };
+
+  if (!isAuthenticated) {
+    return (
+        <main className="min-h-screen bg-[#fafafa] flex items-center justify-center p-4">
+            <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200 w-full max-w-sm">
+                <div className="flex justify-center mb-6">
+                     <svg aria-label="Locked" className="w-12 h-12 text-gray-800" fill="currentColor" role="img" viewBox="0 0 24 24">
+                        <path d="M19 10h-1V7a6 6 0 0 0-12 0v3H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2Zm-7 8a2 2 0 1 1 2-2 2.002 2.002 0 0 1-2 2Zm3-8H9V7a3 3 0 0 1 6 0Z" />
+                    </svg>
+                </div>
+                <h1 className="text-center text-xl font-semibold mb-6 text-gray-900">Enter Passcode</h1>
+                <form onSubmit={handleLogin} className="space-y-4">
+                    <div>
+                        <input
+                            type="password"
+                            value={passcode}
+                            onChange={(e) => setPasscode(e.target.value)}
+                            className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#0095f6] focus:border-[#0095f6] block p-2.5 outline-none"
+                            placeholder="Passcode"
+                            required
+                        />
+                    </div>
+                    {error && (
+                        <p className="text-red-500 text-xs text-center">{error}</p>
+                    )}
+                    <button
+                        type="submit"
+                        className="w-full text-white bg-[#0095f6] hover:bg-[#1877f2] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors"
+                    >
+                        Unlock
+                    </button>
+                </form>
+            </div>
+        </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#fafafa]">

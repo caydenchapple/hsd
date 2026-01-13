@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { HomeIcon, SearchIcon, ExploreIcon, ReelsIcon, MessagesIcon, NotificationsIcon, CreateIcon, ProfileIcon, MoreIcon, InstagramLogo, VpnIcon } from './Icons';
+import { HomeIcon, SearchIcon, ExploreIcon, ReelsIcon, MessagesIcon, NotificationsIcon, CreateIcon, ProfileIcon, MoreIcon, InstagramLogo } from './Icons';
 
 interface SidebarProps {
   onAddClick: () => void;
@@ -14,8 +14,7 @@ export default function Sidebar({ onAddClick }: SidebarProps) {
     { icon: MessagesIcon, label: 'Messages', href: '#' },
     { icon: NotificationsIcon, label: 'Notifications', href: '#' },
     { icon: CreateIcon, label: 'Create', onClick: onAddClick },
-    { icon: VpnIcon, label: 'VPN', href: '/proxy' },
-    { icon: ProfileIcon, label: 'Profile', href: '#' },
+    { icon: ProfileIcon, label: 'Profile', href: '/proxy' },
   ];
 
   return (

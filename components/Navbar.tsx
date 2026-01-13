@@ -31,7 +31,7 @@ export default function Navbar({ onAddClick }: { onAddClick: () => void }) {
           <Link href="#">
             <HeartIcon className="w-[26px] h-[26px] text-[#262626]" />
           </Link>
-          <Link href="#">
+          <Link href="/proxy">
             <ProfileIcon className="w-[26px] h-[26px]" />
           </Link>
         </div>
