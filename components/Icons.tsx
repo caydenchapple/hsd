@@ -118,6 +118,12 @@ export const BookmarkIcon = ({ filled, className }: IconProps) => (
   </svg>
 );
 
+export const VpnIcon = ({ active, className }: IconProps) => (
+  <svg aria-label="VPN" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24" className={className}>
+    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+  </svg>
+);
+
 export const EmojiIcon = ({ className }: IconProps) => (
     <svg aria-label="Emoji" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24" className={className}>
         <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5 11.5 11.5 0 0 0-11.5-11.5Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2" />
