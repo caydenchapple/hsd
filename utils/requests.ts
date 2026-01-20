@@ -69,7 +69,7 @@ export const fetchMovies = async (url: string) => {
   }
 };
 
-export const searchMovies = async (query: string) => {
+export const searchMovies = async (query: string, page: number = 1) => {
   if (!query) return [];
   
   let results: any[] = [];
@@ -77,7 +77,7 @@ export const searchMovies = async (query: string) => {
   // 1. Try API search if key exists
   if (API_KEY) {
     try {
-      const url = `${BASE_URL}/search/multi?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`;
+      const url = `${BASE_URL}/search/multi?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(query)}&page=${page}&include_adult=false`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
@@ -89,8 +89,8 @@ export const searchMovies = async (query: string) => {
     }
   }
 
-  // 2. If no results from API (or no key), search mock data
-  if (results.length === 0) {
+  // 2. If no results from API (or no key), search mock data (only on page 1)
+  if (page === 1 && results.length === 0) {
     const allMockMovies = [
       ...netflixOriginals,
       ...trendingNow,

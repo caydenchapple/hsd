@@ -30,7 +30,11 @@ const TARGET_URL = process.argv[2] || process.env.TARGET_URL || 'http://localhos
 
     // Check default source (VidNest)
     // Wait for iframe
-    await page.waitForSelector('iframe', { timeout: 5000 }).catch(() => console.log("Iframe not found immediately"));
+    try {
+        await page.waitForSelector('iframe', { timeout: 10000 });
+    } catch (e) {
+        console.log("Iframe not found immediately");
+    }
     
     let iframeSrc = await page.$eval('iframe', el => el.src).catch(e => "Error getting src");
     console.log('Initial iframe src:', iframeSrc);
@@ -43,21 +47,26 @@ const TARGET_URL = process.argv[2] || process.env.TARGET_URL || 'http://localhos
 
     // Switch to VidSrc
     console.log('Switching to VidSrc...');
-    // The select is the only select on the page usually, or we can target by structure
-    // In WatchPlayer.tsx: <select value={source} ...>
-    await page.waitForSelector('select', { timeout: 5000 });
-    await page.select('select', 'vidsrc');
-    
-    // Wait for update (react state update)
-    await new Promise(r => setTimeout(r, 2000));
-    
-    iframeSrc = await page.$eval('iframe', el => el.src);
-    console.log('New iframe src:', iframeSrc);
-    
-    if (iframeSrc.includes('vidsrc.cc')) {
-      console.log('PASS: Source switched to VidSrc');
-    } else {
-      console.error('FAIL: Source did not switch to VidSrc');
+    try {
+        // Wait for the source select
+        await page.waitForSelector('select', { timeout: 10000 });
+        
+        // Select 'vidsrc'
+        await page.select('select', 'vidsrc');
+        
+        // Wait for update (react state update)
+        await new Promise(r => setTimeout(r, 2000));
+        
+        iframeSrc = await page.$eval('iframe', el => el.src);
+        console.log('New iframe src:', iframeSrc);
+        
+        if (iframeSrc.includes('vidsrc.cc')) {
+          console.log('PASS: Source switched to VidSrc');
+        } else {
+          console.error('FAIL: Source did not switch to VidSrc');
+        }
+    } catch (e) {
+        console.error('FAIL: Could not find Source selector (Deployment might be pending or GlobalPlayer not updated). Error:', e.message);
     }
 
     // ----------------------------------------------------------------

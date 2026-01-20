@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Thumbnail from '@/components/Thumbnail';
 import { searchMovies } from '@/utils/requests';
+import InfiniteScrollSearchResults from '@/components/InfiniteScrollSearchResults';
 
 export default async function SearchPage({
   searchParams,
@@ -29,11 +30,15 @@ export default async function SearchPage({
         </div>
         
         {movies && movies.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pr-4 md:pr-16">
-            {movies.map((movie: any) => (
-              <Thumbnail key={movie.id} movie={movie} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pr-4 md:pr-16">
+              {movies.map((movie: any) => (
+                <Thumbnail key={movie.id} movie={movie} />
+              ))}
+            </div>
+            {/* Client component to load more results */}
+            <InfiniteScrollSearchResults initialQuery={query} initialMovies={movies} />
+          </>
         ) : (
           <div className="text-white text-xl flex flex-col items-center justify-center min-h-[50vh]">
             <p className="mb-4">No results found for "{query}".</p>
