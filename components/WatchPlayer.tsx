@@ -17,6 +17,7 @@ export default function WatchPlayer({ id, type, tvDetails }: Props) {
   const [episode, setEpisode] = useState(1);
   const [episodes, setEpisodes] = useState<any[]>([]);
   const [showMenu, setShowMenu] = useState(isTv); // Show menu by default for TV shows
+  const [source, setSource] = useState('vidnest'); // 'vidnest' | 'vidsrc'
 
   useEffect(() => {
     if (isTv && tvDetails) {
@@ -82,9 +83,20 @@ export default function WatchPlayer({ id, type, tvDetails }: Props) {
     return false;
   };
 
-  const src = isTv
-    ? `https://vidnest.fun/tv/${id}/${season}/${episode}`
-    : `https://vidnest.fun/movie/${id}`;
+  const getSrc = () => {
+    if (source === 'vidnest') {
+      return isTv
+        ? `https://vidnest.fun/tv/${id}/${season}/${episode}`
+        : `https://vidnest.fun/movie/${id}`;
+    } else {
+      // vidsrc.cc
+      return isTv
+        ? `https://vidsrc.cc/v2/embed/tv/${id}/${season}/${episode}`
+        : `https://vidsrc.cc/v2/embed/movie/${id}`;
+    }
+  };
+
+  const src = getSrc();
 
   return (
     <div className="h-screen w-screen bg-black relative flex overflow-hidden">
@@ -94,6 +106,17 @@ export default function WatchPlayer({ id, type, tvDetails }: Props) {
           <span className="font-bold text-lg md:text-xl">Back to Home</span>
         </Link>
         
+        <div className={`absolute top-4 z-50 flex items-center gap-4 ${isTv ? 'right-20 md:right-32' : 'right-4'}`}>
+            <select
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              className="bg-black/50 text-white p-2 rounded backdrop-blur-sm border border-white/10 hover:bg-white/10 transition appearance-none cursor-pointer"
+            >
+              <option value="vidnest">Source: VidNest</option>
+              <option value="vidsrc">Source: VidSrc</option>
+            </select>
+        </div>
+
         {isTv && (
             <div className="absolute top-4 right-4 z-50 flex items-center gap-4">
                 {hasNextEpisode() && (
