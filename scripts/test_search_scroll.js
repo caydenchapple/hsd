@@ -59,6 +59,14 @@ const TARGET_URL = process.argv[2] || process.env.TARGET_URL || 'http://localhos
         console.error('FAIL: TMDB Logo not found on search page.');
     }
 
+    // Check for results (thumbnails)
+    try {
+        await page.waitForSelector('.grid div', { timeout: 5000 });
+        console.log('PASS: Search results found.');
+    } catch (e) {
+        console.log('WARN: No search results found (API Key might be missing or query yielded nothing).');
+    }
+
     // Check for "Powered by" text
     const poweredBy = await page.evaluate(() => document.body.innerText.includes('Powered by'));
     if (poweredBy) {
