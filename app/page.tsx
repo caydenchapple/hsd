@@ -13,6 +13,8 @@ import {
   documentaries as mockDocumentaries
 } from '@/utils/mockData';
 
+import InfiniteScrollMovies from '@/components/InfiniteScrollMovies';
+
 export default async function Home() {
   const [
     netflixOriginals,
@@ -47,6 +49,11 @@ export default async function Home() {
           <Row title="Scary Movies" movies={horrorMovies || mockHorrorMovies} />
           <Row title="Romance Movies" movies={romanceMovies || mockRomanceMovies} />
           <Row title="Documentaries" movies={documentaries || mockDocumentaries} />
+        </section>
+        
+        {/* Infinite Scroll Section for browsing the database */}
+        <section className="mt-10 border-t border-gray-700 pt-10 pr-4 md:pr-16">
+          <InfiniteScrollMovies />
         </section>
       </main>
     </div>

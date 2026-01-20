@@ -134,6 +134,8 @@ const TARGET_URL = process.argv[2] || process.env.TARGET_URL || 'http://localhos
 
   } catch (error) {
     console.error('Test Suite Failed:', error);
+    await page.screenshot({ path: 'scripts/error_screenshot.png' });
+    console.log('Screenshot saved to scripts/error_screenshot.png');
   } finally {
     await browser.close();
     console.log('\nTest Suite Completed.');

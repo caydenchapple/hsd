@@ -1,5 +1,5 @@
-import WatchPlayer from '@/components/WatchPlayer';
 import { fetchTvShowDetails } from '@/utils/requests';
+import WatchSession from '@/components/WatchSession';
 
 interface Props {
   params: Promise<{
@@ -21,5 +21,5 @@ export default async function Watch(props: Props) {
     tvDetails = await fetchTvShowDetails(id);
   }
 
-  return <WatchPlayer id={id} type={type || 'movie'} tvDetails={tvDetails} />;
+  return <WatchSession id={id} type={type || 'movie'} tvDetails={tvDetails} />;
 }
