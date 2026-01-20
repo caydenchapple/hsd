@@ -16,6 +16,8 @@ export default function GlobalPlayer() {
   const [episodes, setEpisodes] = useState<any[]>([]);
   const [showMenu, setShowMenu] = useState(false);
   const [source, setSource] = useState('vidnest'); // 'vidnest' | 'vidsrc'
+  const [currentTime, setCurrentTime] = useState(0);
+  const [startTime, setStartTime] = useState(0);
 
   // Reset local state when video changes
   useEffect(() => {
@@ -27,12 +29,30 @@ export default function GlobalPlayer() {
       setSeason(initialSeason);
       setEpisode(video.episode || 1);
       setShowMenu(false);
+      setStartTime(0);
+      setCurrentTime(0);
       
       if (video.type === 'tv') {
         fetchEpisodes(video.id, initialSeason);
       }
     }
   }, [video]);
+
+  // Listen for player events from VidSrc
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // We accept messages from vidsrc domains
+      if (event.origin.includes('vidsrc')) {
+        if (event.data && event.data.type === 'PLAYER_EVENT') {
+          const { currentTime: time } = event.data.data;
+          if (time) setCurrentTime(time);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
 
   const fetchEpisodes = async (id: string, seasonNum: number) => {
     const data = await fetchSeasonDetails(id, seasonNum);
@@ -76,6 +96,21 @@ export default function GlobalPlayer() {
     return false;
   };
 
+  // Reset start time when episode/season/source changes
+  useEffect(() => {
+    setStartTime(0);
+    setCurrentTime(0);
+  }, [episode, season, source]);
+
+  const handleSkipIntro = () => {
+    // Skip 85 seconds (standard intro length)
+    const skipAmount = 85;
+    // If we have a current time, skip relative to it. 
+    // If not (e.g. vidnest might not send events), we just try to start at 85s.
+    const newTime = currentTime > 0 ? currentTime + skipAmount : skipAmount;
+    setStartTime(newTime);
+  };
+
   const handleMinimize = () => {
     setIsMinimized(!isMinimized);
     // If we are minimizing and currently on the watch page, go home so user can browse
@@ -89,16 +124,25 @@ export default function GlobalPlayer() {
   const isTv = video.type === 'tv';
   
   const getSrc = () => {
+    let baseUrl = '';
     if (source === 'vidnest') {
-      return isTv
+      baseUrl = isTv
         ? `https://vidnest.fun/tv/${video.id}/${season}/${episode}`
         : `https://vidnest.fun/movie/${video.id}`;
     } else {
       // vidsrc.cc
-      return isTv
+      baseUrl = isTv
         ? `https://vidsrc.cc/v2/embed/tv/${video.id}/${season}/${episode}`
         : `https://vidsrc.cc/v2/embed/movie/${video.id}`;
     }
+
+    // Append startAt if we have a skip timestamp
+    if (startTime > 0) {
+      const separator = baseUrl.includes('?') ? '&' : '?';
+      return `${baseUrl}${separator}startAt=${Math.floor(startTime)}`;
+    }
+    
+    return baseUrl;
   };
 
   const src = getSrc();
@@ -177,6 +221,17 @@ export default function GlobalPlayer() {
              >
                  <span className="font-bold">Next Episode</span>
                  <SkipForward className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+             </button>
+          )}
+
+          {/* Skip Intro Button (Overlay) */}
+          {!isMinimized && !showMenu && (
+             <button 
+                 onClick={handleSkipIntro}
+                 className="absolute bottom-20 left-8 flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 transition p-3 rounded backdrop-blur-sm shadow-lg border border-white/10 z-10 group"
+             >
+                 <SkipForward className="h-5 w-5" />
+                 <span className="font-bold">Skip Intro (+85s)</span>
              </button>
           )}
       </div>
