@@ -38,7 +38,7 @@ export default function InfiniteScrollSearchResults({ initialQuery, initialMovie
     setIsLoading(true);
     
     try {
-      const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+      const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || 'c32a6a9f960ad2825be04344f6bcc5b3';
       const BASE_URL = "https://api.themoviedb.org/3";
       
       if (!API_KEY) {

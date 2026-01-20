@@ -29,7 +29,7 @@ export default function InfiniteScrollMovies() {
       // We use a server action or API route usually, but here we'll call the API directly
       // utilizing the public key logic from requests.ts
       // Note: In a real app, we should use a proxy API route to hide the key if it wasn't NEXT_PUBLIC
-      const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+      const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || 'c32a6a9f960ad2825be04344f6bcc5b3';
       const BASE_URL = "https://api.themoviedb.org/3";
       
       if (!API_KEY) {
