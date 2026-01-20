@@ -1,5 +1,5 @@
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
+import WatchPlayer from '@/components/WatchPlayer';
+import { fetchTvShowDetails } from '@/utils/requests';
 
 interface Props {
   params: Promise<{
@@ -15,23 +15,11 @@ export default async function Watch(props: Props) {
   const { type } = await props.searchParams;
   
   const isTv = type === 'tv';
-  const src = isTv
-    ? `https://vidnest.fun/tv/${id}/1/1`
-    : `https://vidnest.fun/movie/${id}`;
+  let tvDetails = null;
 
-  return (
-    <div className="h-screen w-screen bg-black relative">
-      <Link href="/" className="absolute top-4 left-4 z-50 flex items-center gap-2 text-white hover:text-gray-300 transition bg-black/50 p-2 rounded">
-        <ChevronLeft className="h-8 w-8" />
-        <span className="font-bold text-xl">Back to Home</span>
-      </Link>
-      <iframe
-        src={src}
-        className="w-full h-full"
-        frameBorder="0"
-        allowFullScreen
-        allow="autoplay; encrypted-media"
-      />
-    </div>
-  );
+  if (isTv) {
+    tvDetails = await fetchTvShowDetails(id);
+  }
+
+  return <WatchPlayer id={id} type={type || 'movie'} tvDetails={tvDetails} />;
 }

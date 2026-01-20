@@ -15,13 +15,15 @@ export default function Thumbnail({ movie }: Props) {
     >
       <Image
         src={movie.backdrop_path || movie.poster_path ? `${TMDB_IMAGE_BASE_URL}${movie.backdrop_path || movie.poster_path}` : "https://via.placeholder.com/500x281?text=No+Image"}
-        className="rounded-sm object-cover md:rounded"
+        className="rounded-sm object-cover md:rounded transition-all duration-300 group-hover:brightness-110"
         fill
         sizes="(max-width: 768px) 180px, 260px"
         alt={movie.title || movie.name || "Movie"}
       />
-      <div className="absolute bottom-0 left-0 right-0 p-1 md:p-2 bg-black/60 text-white text-[10px] md:text-xs font-bold rounded-b-sm md:rounded-b">
-        <p className="truncate text-center">{movie.title || movie.name}</p>
+      {/* Title overlay - only visible on hover */}
+      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/90 to-transparent text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-sm md:rounded-b flex flex-col justify-end h-full">
+        <p className="truncate text-center text-xs md:text-sm font-bold text-shadow-sm">{movie.title || movie.name}</p>
+        <p className="text-[10px] text-green-400 text-center font-semibold mt-1">98% Match</p>
       </div>
     </Link>
   );

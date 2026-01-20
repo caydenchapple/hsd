@@ -31,7 +31,9 @@ export default function Banner({ netflixOriginals }: Props) {
           alt={movie.title || movie.name || "Banner"}
           priority
         />
-         <div className="absolute bottom-0 h-32 w-full bg-gradient-to-t from-[#141414] to-transparent" />
+        {/* Vignette gradients */}
+        <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-[#141414] via-transparent to-transparent opacity-80" />
+        <div className="absolute bottom-0 h-48 w-full bg-gradient-to-t from-[#141414] via-[#141414]/60 to-transparent" />
       </div>
 
       {movie.logo_path ? (
