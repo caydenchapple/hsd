@@ -15,8 +15,7 @@ export default function GlobalPlayer() {
   const [episode, setEpisode] = useState(1);
   const [episodes, setEpisodes] = useState<any[]>([]);
   const [showMenu, setShowMenu] = useState(false);
-  const [showQualityMenu, setShowQualityMenu] = useState(false);
-  const [quality, setQuality] = useState('Auto');
+  const [source, setSource] = useState('vidnest'); // 'vidnest' | 'vidsrc'
 
   // Reset local state when video changes
   useEffect(() => {
@@ -88,9 +87,21 @@ export default function GlobalPlayer() {
   if (!video) return null;
 
   const isTv = video.type === 'tv';
-  const src = isTv
-    ? `https://vidnest.fun/tv/${video.id}/${season}/${episode}`
-    : `https://vidnest.fun/movie/${video.id}`;
+  
+  const getSrc = () => {
+    if (source === 'vidnest') {
+      return isTv
+        ? `https://vidnest.fun/tv/${video.id}/${season}/${episode}`
+        : `https://vidnest.fun/movie/${video.id}`;
+    } else {
+      // vidsrc.cc
+      return isTv
+        ? `https://vidsrc.cc/v2/embed/tv/${video.id}/${season}/${episode}`
+        : `https://vidsrc.cc/v2/embed/movie/${video.id}`;
+    }
+  };
+
+  const src = getSrc();
 
   const containerClasses = isMinimized
     ? "fixed bottom-4 right-4 w-80 md:w-96 aspect-video z-[100] shadow-2xl rounded-lg overflow-hidden border border-gray-800 bg-black transition-all duration-300"
@@ -111,29 +122,16 @@ export default function GlobalPlayer() {
 
         {/* Right Controls */}
         <div className="flex items-center gap-2 pointer-events-auto">
-           {/* Quality Selector */}
+           {/* Source Selector */}
            <div className="relative">
-             <button 
-                onClick={() => setShowQualityMenu(!showQualityMenu)}
-                className="text-white hover:text-gray-300 bg-black/50 p-2 rounded-full backdrop-blur-sm"
-                title="Quality"
-             >
-               <Settings className="h-5 w-5" />
-             </button>
-             {showQualityMenu && (
-               <div className="absolute top-10 right-0 bg-[#141414] border border-gray-700 rounded shadow-lg p-2 min-w-[120px]">
-                 <div className="text-xs text-gray-400 mb-2 px-2">Select Quality</div>
-                 {['Auto', '1080p', '720p', '480p'].map(q => (
-                   <button 
-                     key={q}
-                     onClick={() => { setQuality(q); setShowQualityMenu(false); }}
-                     className={`block w-full text-left px-2 py-1 text-sm rounded ${quality === q ? 'bg-red-600 text-white' : 'text-gray-300 hover:bg-gray-800'}`}
-                   >
-                     {q}
-                   </button>
-                 ))}
-               </div>
-             )}
+             <select
+                value={source}
+                onChange={(e) => setSource(e.target.value)}
+                className="bg-black/50 text-white p-2 rounded backdrop-blur-sm border border-white/10 hover:bg-white/10 transition appearance-none cursor-pointer text-sm"
+              >
+                <option value="vidnest">Source: VidNest</option>
+                <option value="vidsrc">Source: VidSrc</option>
+              </select>
            </div>
 
           {/* Minimize/Maximize */}
